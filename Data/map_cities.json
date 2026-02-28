@@ -1,10 +1,10 @@
 [
   {
     "city_id": 1,
-    "city": "New York",
+    "city": "New Tork",
     "state": "NY",
     "region": "Northeast",
-    "updated_at" : "2026-02-28T16:06:33.718+00:00"
+    "updated_at" : "2026-02-28T20:06:33.718+00:00"
   },
   {
     "city_id": 2,
@@ -15,58 +15,58 @@
   },
   {
     "city_id": 3,
-    "city": "Chicago",
+    "city": "Chicagos",
     "state": "IL",
     "region": "Midwest",
-    "updated_at" : "2026-02-28T16:06:33.718+00:00"
+    "updated_at" : "2026-02-28T20:06:33.718+00:00"
   },
   {
     "city_id": 4,
-    "city": "Houston",
+    "city": "Houstons",
     "state": "TX",
     "region": "South",
-    "updated_at" : "2026-02-28T16:06:33.718+00:00"
+    "updated_at" : "2026-02-28T18:06:33.718+00:00"
   },
   {
     "city_id": 5,
-    "city": "Phoenix",
+    "city": "Phoenixt",
     "state": "AZ",
     "region": "Southwest",
-    "updated_at" : "2026-02-28T16:06:33.718+00:00"
+    "updated_at" : "2026-02-28T20:06:33.718+00:00"
   },
   {
     "city_id": 6,
-    "city": "Philadelphia",
+    "city": "Philadelphias",
     "state": "PA",
     "region": "Northeast",
-    "updated_at" : "2026-02-28T16:06:33.718+00:00"
+    "updated_at" : "2026-02-28T20:06:33.718+00:00"
   },
   {
     "city_id": 7,
-    "city": "San Antonio",
+    "city": "San Antonios",
     "state": "TX",
     "region": "South",
-    "updated_at" : "2026-02-28T16:06:33.718+00:00"
+    "updated_at" : "2026-02-28T18:06:33.718+00:00"
   },
   {
     "city_id": 8,
-    "city": "San Diego",
+    "city": "San Diegos",
     "state": "CA",
     "region": "West",
-    "updated_at" : "2026-02-28T16:06:33.718+00:00"
+    "updated_at" : "2026-02-28T19:06:33.718+00:00"
   },
   {
     "city_id": 9,
-    "city": "Dallas",
+    "city": "Dallasr",
     "state": "TX",
     "region": "South",
-    "updated_at" : "2026-02-28T16:06:33.718+00:00"
+    "updated_at" : "2026-02-28T20:06:33.718+00:00"
   },
   {
     "city_id": 10,
     "city": "San Jose",
     "state": "CA",
     "region": "West",
-    "updated_at" : "2026-02-28T16:06:33.718+00:00"
+    "updated_at" : "2026-02-28T20:06:33.718+00:00"
   }
 ]

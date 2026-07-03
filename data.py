@@ -13,11 +13,11 @@ fake = Faker()
 
 
 VEHICLE_TYPE_MAPPING = [
-    {'vehicle_type_id': 1, 'vehicle_type': 'UberX', 'description': 'Standard', 'base_rate': 2.50, 'per_mile': 1.75, 'per_minute': 0.35},
-    {'vehicle_type_id': 2, 'vehicle_type': 'UberXL', 'description': 'Extra Large', 'base_rate': 3.50, 'per_mile': 2.25, 'per_minute': 0.45},
-    {'vehicle_type_id': 3, 'vehicle_type': 'UberPOOL', 'description': 'Shared Ride', 'base_rate': 2.00, 'per_mile': 1.50, 'per_minute': 0.30},
-    {'vehicle_type_id': 4, 'vehicle_type': 'Uber Comfort', 'description': 'Comfortable', 'base_rate': 3.00, 'per_mile': 2.00, 'per_minute': 0.40},
-    {'vehicle_type_id': 5, 'vehicle_type': 'Uber Black', 'description': 'Premium', 'base_rate': 5.00, 'per_mile': 3.50, 'per_minute': 0.60}
+    {'vehicle_type_id': 1, 'vehicle_type': 'VeyroX', 'description': 'Standard', 'base_rate': 2.50, 'per_mile': 1.75, 'per_minute': 0.35},
+    {'vehicle_type_id': 2, 'vehicle_type': 'VeyroXL', 'description': 'Extra Large', 'base_rate': 3.50, 'per_mile': 2.25, 'per_minute': 0.45},
+    {'vehicle_type_id': 3, 'vehicle_type': 'VeyroPOOL', 'description': 'Shared Ride', 'base_rate': 2.00, 'per_mile': 1.50, 'per_minute': 0.30},
+    {'vehicle_type_id': 4, 'vehicle_type': 'Veyro Comfort', 'description': 'Comfortable', 'base_rate': 3.00, 'per_mile': 2.00, 'per_minute': 0.40},
+    {'vehicle_type_id': 5, 'vehicle_type': 'Veyro Black', 'description': 'Premium', 'base_rate': 5.00, 'per_mile': 3.50, 'per_minute': 0.60}
 ]
 
 PAYMENT_METHOD_MAPPING = [
@@ -81,7 +81,14 @@ CANCELLATION_REASON_ID_MAP = {c['cancellation_reason']: c['cancellation_reason_i
 
 
 
-def generate_uber_ride_confirmation():
+def generate_veyro_ride_confirmation(
+    custom_pickup=None,
+    custom_dropoff=None,
+    custom_passenger_name=None,
+    custom_passenger_phone=None,
+    custom_vehicle_type=None,
+    custom_payment_method=None
+):
     
     # Generate timestamps
     pickup_time = datetime.now() - timedelta(days=random.randint(0, 30), hours=random.randint(0, 23))
@@ -105,8 +112,8 @@ def generate_uber_ride_confirmation():
     total_fare = round(subtotal + tip, 2)
     
     # Location details
-    pickup_address = fake.address().replace('\n', ', ')
-    dropoff_address = fake.address().replace('\n', ', ')
+    pickup_address = custom_pickup if custom_pickup else fake.address().replace('\n', ', ')
+    dropoff_address = custom_dropoff if custom_dropoff else fake.address().replace('\n', ', ')
     
     # Get cities and their IDs
     pickup_city = random.choice(CITY_LIST)
@@ -127,11 +134,11 @@ def generate_uber_ride_confirmation():
         cancellation_reason_id = CANCELLATION_REASON_ID_MAP[cancellation_reason]
 
     # Get vehicle type and its ID
-    vehicle_type = random.choice(VEHICLE_TYPES_LIST)
+    vehicle_type = custom_vehicle_type if (custom_vehicle_type and custom_vehicle_type in VEHICLE_TYPES_LIST) else random.choice(VEHICLE_TYPES_LIST)
     vehicle_type_id = VEHICLE_TYPE_ID_MAP[vehicle_type]
 
     # Get payment method and its ID
-    payment_method = random.choice(PAYMENT_METHODS_LIST)
+    payment_method = custom_payment_method if (custom_payment_method and custom_payment_method in PAYMENT_METHODS_LIST) else random.choice(PAYMENT_METHODS_LIST)
     payment_method_id = PAYMENT_METHOD_ID_MAP[payment_method]
 
     # Get ride status and its ID
@@ -159,9 +166,9 @@ def generate_uber_ride_confirmation():
         'cancellation_reason_id': cancellation_reason_id,
         
         # Passenger Information
-        'passenger_name': fake.name(),
+        'passenger_name': custom_passenger_name if custom_passenger_name else fake.name(),
         'passenger_email': fake.email(),
-        'passenger_phone': fake.phone_number(),
+        'passenger_phone': custom_passenger_phone if custom_passenger_phone else fake.phone_number(),
         
         # Driver Information
         'driver_name': fake.name(),

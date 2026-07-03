@@ -1,7 +1,7 @@
 [
   {
     "vehicle_type_id": 1,
-    "vehicle_type": "UberX",
+    "vehicle_type": "VeyroX",
     "description": "Standard",
     "base_rate": 2.5,
     "per_mile": 1.75,
@@ -9,7 +9,7 @@
   },
   {
     "vehicle_type_id": 2,
-    "vehicle_type": "UberXL",
+    "vehicle_type": "VeyroXL",
     "description": "Extra Large",
     "base_rate": 3.5,
     "per_mile": 2.25,
@@ -17,7 +17,7 @@
   },
   {
     "vehicle_type_id": 3,
-    "vehicle_type": "UberPOOL",
+    "vehicle_type": "VeyroPOOL",
     "description": "Shared Ride",
     "base_rate": 2.0,
     "per_mile": 1.5,
@@ -25,7 +25,7 @@
   },
   {
     "vehicle_type_id": 4,
-    "vehicle_type": "Uber Comfort",
+    "vehicle_type": "Veyro Comfort",
     "description": "Comfortable",
     "base_rate": 3.0,
     "per_mile": 2.0,
@@ -33,7 +33,7 @@
   },
   {
     "vehicle_type_id": 5,
-    "vehicle_type": "Uber Black",
+    "vehicle_type": "Veyro Black",
     "description": "Premium",
     "base_rate": 5.0,
     "per_mile": 3.5,

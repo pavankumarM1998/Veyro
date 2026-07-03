@@ -3,34 +3,331 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ride Booking Home</title>
+    <title>Veyro - Ride Confirmed</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
+        :root {
+            --bg-color: #0b0f19;
+            --card-bg: rgba(18, 24, 38, 0.85);
+            --card-border: rgba(255, 255, 255, 0.08);
+            --accent-primary: #6366f1;
+            --accent-cyan: #06b6d4;
+            --success-color: #10b981;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --gradient-primary: linear-gradient(135deg, #6366f1 0%, #a855f7 50%, #06b6d4 100%);
+        }
+
+        * {
+            box-sizing: border-box;
             margin: 0;
-            padding: 20px;
+            padding: 0;
         }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 40px 20px;
+            position: relative;
+        }
+
+        .glow-bg {
+            position: fixed;
+            width: 700px;
+            height: 700px;
+            background: radial-gradient(circle, rgba(16, 185, 129, 0.1) 0%, rgba(99, 102, 241, 0.05) 50%, transparent 70%);
+            top: 20%;
+            left: 50%;
+            transform: translate(-50%, -20%);
+            z-index: 0;
+            pointer-events: none;
+        }
+
         .container {
-            max-width: 600px;
-            margin: auto;
-            background: white;
+            position: relative;
+            z-index: 1;
+            max-width: 720px;
+            width: 100%;
+        }
+
+        .header-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 32px;
+        }
+
+        .logo {
+            font-family: 'Outfit', sans-serif;
+            font-size: 26px;
+            font-weight: 800;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .card {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--card-border);
+            border-radius: 24px;
+            padding: 40px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+        }
+
+        .success-banner {
+            background: rgba(16, 185, 129, 0.12);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            border-radius: 16px;
             padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 32px;
         }
-        h1 {
-            color: #333;
+
+        .icon-box {
+            width: 48px;
+            height: 48px;
+            background: #10b981;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ffffff;
+            flex-shrink: 0;
         }
-        p {
-            color: #666;
+
+        .banner-text h3 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 20px;
+            color: #ffffff;
+            margin-bottom: 4px;
+        }
+
+        .banner-text p {
+            font-size: 14px;
+            color: #a7f3d0;
+        }
+
+        .section-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-muted);
+            margin-bottom: 16px;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .info-box {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 16px;
+            padding: 16px 20px;
+        }
+
+        .info-label {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-bottom: 6px;
+        }
+
+        .info-value {
+            font-size: 17px;
+            font-weight: 600;
+            color: #ffffff;
+        }
+
+        .route-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 32px;
+            position: relative;
+        }
+
+        .route-point {
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+        }
+
+        .dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-top: 4px;
+            flex-shrink: 0;
+        }
+
+        .dot-green { background-color: #10b981; box-shadow: 0 0 10px #10b981; }
+        .dot-indigo { background-color: #6366f1; box-shadow: 0 0 10px #6366f1; }
+
+        .route-line {
+            width: 2px;
+            height: 24px;
+            background: rgba(255, 255, 255, 0.15);
+            margin: 6px 0 6px 5px;
+        }
+
+        .fare-highlight {
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.15) 0%, rgba(6, 182, 212, 0.15) 100%);
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            border-radius: 16px;
+            padding: 20px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 32px;
+        }
+
+        .fare-amount {
+            font-family: 'Outfit', sans-serif;
+            font-size: 32px;
+            font-weight: 800;
+            color: #ffffff;
+        }
+
+        .actions {
+            display: flex;
+            gap: 16px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 16px;
+            border-radius: 14px;
+            font-size: 16px;
+            font-weight: 700;
+            text-align: center;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn-primary {
+            background: var(--gradient-primary);
+            color: #ffffff;
+            box-shadow: 0 10px 25px rgba(99, 102, 241, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 35px rgba(99, 102, 241, 0.5);
         }
     </style>
 </head>
 <body>
+    <div class="glow-bg"></div>
+
     <div class="container">
-        <h1>Ride Confirmed</h1>
-        <p>Your ride has been successfully booked. Thank you for choosing our service!</p>
+        <div class="header-nav">
+            <a href="/" class="logo">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="url(#logo-grad)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <defs>
+                        <linearGradient id="logo-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#6366f1" />
+                            <stop offset="100%" stop-color="#06b6d4" />
+                        </linearGradient>
+                    </defs>
+                    <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+                </svg>
+                Veyro
+            </a>
+        </div>
+
+        <div class="card">
+            <div class="success-banner">
+                <div class="icon-box">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg>
+                </div>
+                <div class="banner-text">
+                    <h3>Ride Booked & Telemetry Streamed</h3>
+                    <p>{{ result if result else 'Event successfully streamed to Azure Event Hub (vayro_topic).' }}</p>
+                </div>
+            </div>
+
+            {% if ride %}
+            <div class="section-title">Ride Summary</div>
+
+            <div class="grid-2">
+                <div class="info-box">
+                    <div class="info-label">Confirmation Number</div>
+                    <div class="info-value">{{ ride.confirmation_number }}</div>
+                </div>
+                <div class="info-box">
+                    <div class="info-label">Passenger</div>
+                    <div class="info-value">{{ ride.passenger_name }}</div>
+                </div>
+            </div>
+
+            <div class="grid-2">
+                <div class="info-box">
+                    <div class="info-label">Driver Assigned</div>
+                    <div class="info-value">{{ ride.driver_name }} (⭐ {{ ride.driver_rating }})</div>
+                </div>
+                <div class="info-box">
+                    <div class="info-label">Vehicle & License</div>
+                    <div class="info-value">{{ ride.vehicle_color }} {{ ride.vehicle_model }} • {{ ride.license_plate }}</div>
+                </div>
+            </div>
+
+            <div class="section-title">Trip Route</div>
+            <div class="route-card">
+                <div class="route-point">
+                    <div class="dot dot-green"></div>
+                    <div>
+                        <div class="info-label">Pickup Location</div>
+                        <div class="info-value" style="font-size: 15px;">{{ ride.pickup_address }}</div>
+                    </div>
+                </div>
+                <div class="route-line"></div>
+                <div class="route-point">
+                    <div class="dot dot-indigo"></div>
+                    <div>
+                        <div class="info-label">Dropoff Location</div>
+                        <div class="info-value" style="font-size: 15px;">{{ ride.dropoff_address }}</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="fare-highlight">
+                <div>
+                    <div class="info-label" style="color: #cbd5e1;">Total Estimated Fare</div>
+                    <div style="font-size: 14px; color: #94a3b8;">Includes distance ({{ ride.distance_miles }} mi) & duration ({{ ride.duration_minutes }} mins)</div>
+                </div>
+                <div class="fare-amount">${{ "%.2f"|format(ride.total_fare) }}</div>
+            </div>
+            {% else %}
+            <p style="color: var(--text-muted); margin-bottom: 24px;">Your ride has been successfully generated and sent to Azure Event Hub.</p>
+            {% endif %}
+
+            <div class="actions">
+                <a href="/book" class="btn btn-primary">Book Another Ride</a>
+            </div>
+        </div>
     </div>
 </body>
 </html>

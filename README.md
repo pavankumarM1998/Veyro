@@ -2,6 +2,8 @@
 
 ### **Live Application URL:** [https://fair-vehicle.web.app](https://fair-vehicle.web.app)
 
+![Project Architecture](./architecture.png)
+
 This repository contains a production-grade end-to-end real-time streaming data pipeline named **Veyro** (pronounced *VAY-ro*). The platform simulates a ride-booking transaction system (similar to Uber) to demonstrate real-time ingestion, stream processing, schema enforcement, and denormalized analytical modeling.
 
 ---

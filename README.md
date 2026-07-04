@@ -1,52 +1,134 @@
-# **VEYRO: REAL-TIME DATA ENGINEERING PROJECT**
+# Veyro: Real-Time Data Engineering & Streaming Project
 
 ### **Live Application URL:** [https://fair-vehicle.web.app](https://fair-vehicle.web.app)
 
-![Project Architecture](https://github.com/pavankumarM1998/Veyro/blob/main/architecture.png)
-
-## **About Veyro**
-* **Pronounced:** *VAY-ro*
-* **Inspiration:** Inspired by **Velocity** (speed) and **Way** (travel, route), combined with the modern tech-style ending **"-ro"**.
-* **Brand Meaning:** Fast, reliable, and smart mobility.
-* **Taglines:** 
-  * *Every Ride. Every Way.*
-  * *Ride Smarter.*
-  * *Move Without Limits.*
-
-Veyro is an end-to-end real-time data engineering project simulating a high-throughput ride-booking platform (similar to Uber). It ingests real-time ride transactions and processes them through a multi-tier streaming pipeline on Azure.
+This repository contains a production-grade end-to-end real-time streaming data pipeline named **Veyro** (pronounced *VAY-ro*). The platform simulates a ride-booking transaction system (similar to Uber) to demonstrate real-time ingestion, stream processing, schema enforcement, and denormalized analytical modeling.
 
 ---
 
-## **System Architecture**
-1. **Frontend UI & Event Producer (FastAPI):** A user-facing web portal that simulates ride bookings. Dynamic ride data (passenger details, fare calculation, coordinates) is generated on the fly.
-2. **Ingestion Layer (Azure Event Hubs):** FastAPI sends the generated ride JSON records to Azure Event Hubs (a Kafka-compatible streaming ingestion service) in real-time.
-3. **Data Lake Storage (ADLS Gen 2):** Stores raw (Bronze), cleaned (Silver), and aggregated (Gold/OBT) Delta tables.
-4. **Processing Layer (Azure Databricks / PySpark):** 
-   * **Bronze Layer:** Consumes the streaming data from Event Hubs and writes the raw JSON payloads into Delta Lake.
-   * **Silver Layer:** Decodes the JSON schemas, enforces quality rules, handles nulls, and standardizes data.
-   * **Gold (OBT - One Big Table):** Joins dimension lookups with ride events to create a unified One Big Table (OBT) for high-performance BI reporting.
-5. **Orchestration (Azure Data Factory):** Orchestrates metadata-driven ingestion pipelines and bulk data movements.
+## 🚀 Key Patterns & Features
+
+*   **Real-Time Event Generation:** A serverless FastAPI portal that simulates dynamic ride bookings, generating mock records using `Faker` (passenger details, fare calculations, surge multipliers, geographical coordinates).
+*   **Asynchronous Streaming Ingestion:** Low-latency ingestion using the Azure Event Hubs Python SDK to stream booking payloads directly to a Kafka-compatible message broker.
+*   **Medallion Architecture (Delta Lake):**
+    *   **Bronze Layer:** Append-only ingestion of raw JSON payloads directly from Event Hubs into ADLS Gen2 Delta format.
+    *   **Silver Layer:** Dynamic JSON schema parsing, type casting, data cleaning (handling null ratings, sanitizing timestamps), and watermark-based event deduplication.
+    *   **Gold Layer (One Big Table - OBT):** Joins transaction facts with dimensional map configurations to build a single flat OBT model optimized for BI reports.
+*   **Serverless Production Deployment:** Deployed to Firebase Hosting integrated with Gen 2 Firebase Python Functions using an `a2wsgi` ASGI-to-WSGI compatibility adapter.
 
 ---
 
-## **How to Run Locally**
+## 📐 Architecture & Data Flow Diagram
 
-1. **Activate the Virtual Environment:**
-   ```powershell
-   .\venv\Scripts\activate
-   ```
-2. **Install Dependencies:**
-   ```powershell
-   pip install -r requirements.txt
-   ```
-3. **Configure Environment Variables:**
-   Create a `.env` file in the root directory:
-   ```env
-   CONNECTION_STRING="Endpoint=sb://<your-eventhub-namespace>.servicebus.windows.net/;SharedAccessKeyName=Sendpolicy;SharedAccessKey=<your-key>;EntityPath=<your-topic>"
-   EVENT_HUBNAME="<your-topic>"
-   ```
-4. **Start the FastAPI Web App:**
-   ```powershell
-   python api.py
-   ```
-   Open `http://localhost:8000` in your browser.
+```mermaid
+flowchart TD
+    subgraph Client ["Client / Event Producer"]
+        UI[FastAPI webApp]
+        Gen[data.py Generator]
+        HubSDK[EventHub Connection SDK]
+    end
+
+    subgraph Ingestion ["Ingestion Broker"]
+        EH[Azure Event Hubs Namespace]
+    end
+
+    subgraph Databricks ["Azure Databricks Processing"]
+        direction TB
+        Bronze[bronze_adls.ipynb <br> Raw Stream Delta]
+        Silver[silver.py / silver_obt.ipynb <br> Cleaned & Parsed Delta]
+        Gold[silver_obt.sql <br> One Big Table Delta]
+    end
+
+    subgraph Storage ["Target Storage (ADLS Gen2)"]
+        RawB[Bronze Container]
+        CleanS[Silver Container]
+        ObtG[Gold OBT Container]
+    end
+
+    subgraph Serving ["BI Analytics"]
+        PBI[Power BI / Databricks SQL]
+    end
+
+    %% Data Connections
+    UI -->|1. Booking Submit| Gen
+    Gen -->|2. Event Payload| HubSDK
+    HubSDK -->|3. Streaming Push| EH
+    EH -->|4. Read Stream| Bronze
+    Bronze -->|5. Write Raw| RawB
+    Bronze -->|6. Clean & Deduplicate| Silver
+    Silver -->|7. Write Structured| CleanS
+    Silver -->|8. Denormalize Lookup Joins| Gold
+    Gold -->|9. Write OBT| ObtG
+    ObtG -->|10. DirectQuery| PBI
+```
+
+---
+
+## 📁 Repository Structure
+
+The project resources are structured logically by layer:
+*   [**`/Code_Files`**](./Code_Files): PySpark and SQL definitions for Databricks stream processing (Bronze, Silver, Gold OBT).
+*   [**`/templates`**](./templates): HTML5 and Jinja2 frontend components for the FastAPI portal.
+*   [**`/Data`**](./Data): Static lookup mappings (cities, payments, vehicle types) and local booking cache.
+*   [**`api.py`**](./api.py) & [**`main.py`**](./main.py): Application entry points for local run and Firebase Cloud Functions.
+*   [**`data.py`**](./data.py) & [**`connection.py`**](./connection.py): Ride event simulator and Event Hub connection client.
+
+---
+
+## 🛠️ Pipeline Details
+
+### 1. Event Producer App (`api.py` & `main.py`)
+Serves the dynamic ride booking user interface.
+*   **Workflow:**
+    1.  User enters pickup/dropoff location or selects custom parameters.
+    2.  `data.py` calculates distance-based fare, applies random surge multipliers (1.0x to 2.5x), and structures the ride metadata.
+    3.  `connection.py` establishes connection with Azure Event Hubs using connection strings and shoots the event.
+    4.  Simultaneously saves the booking locally to `Data/local_bookings.json` for validation.
+
+### 2. Bronze Ingestion Pipeline (`bronze_adls.ipynb`)
+Performs real-time raw stream capturing.
+*   **Workflow:**
+    1.  Establishes a connection to Azure Event Hubs from Databricks using the Event Hubs Spark connector.
+    2.  Reads the streaming source bytes.
+    3.  Writes the stream raw payload into the Bronze container in Delta Lake format with checkpointing enabled.
+
+### 3. Silver & Gold OBT Pipeline (`silver_obt.ipynb` & `silver_obt.sql`)
+Cleans transactions and prepares denormalized serving tables.
+*   **Workflow:**
+    1.  Reads the streaming Delta table from the Bronze folder.
+    2.  Applies schema parsing to extract structured columns from the JSON body.
+    3.  Cleans columns, enforces correct datatypes, handles null entries, and filters late-arriving events.
+    4.  Performs joins against static dimensions (`map_cities`, `map_payment_methods`, `map_vehicle_types`) to generate a single denormalized **One Big Table (OBT)**.
+    5.  Outputs the Gold table in Delta format, ready for Power BI consumption.
+
+---
+
+## ⚙️ Setup & Execution Guide
+
+### 1. Local Run Configuration
+1.  **Activate Virtual Environment:**
+    ```powershell
+    .\venv\Scripts\activate
+    ```
+2.  **Install Dependencies:**
+    ```powershell
+    pip install -r requirements.txt
+    ```
+3.  **Configure Environment Variables (`.env`):**
+    ```env
+    CONNECTION_STRING="Endpoint=sb://<your-eventhub-namespace>.servicebus.windows.net/;SharedAccessKeyName=Sendpolicy;SharedAccessKey=<your-key>;EntityPath=<your-topic>"
+    EVENT_HUBNAME="<your-topic>"
+    ```
+4.  **Run FastAPI Locally:**
+    ```powershell
+    python api.py
+    ```
+    Access the portal at `http://localhost:8000`.
+
+### 2. Production Firebase Deploy
+The app is configured for serverless hosting:
+*   Make sure you are logged in to the Firebase CLI.
+*   Deploy using the command:
+    ```powershell
+    firebase deploy --force
+    ```

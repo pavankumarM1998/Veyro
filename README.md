@@ -1,7 +1,5 @@
 # Veyro: Real-Time Data Engineering & Streaming Project
 
-### **Live Application URL:** [https://fair-vehicle.web.app](https://fair-vehicle.web.app)
-
 ![Project Architecture](./architecture.png)
 
 This repository contains a production-grade end-to-end real-time streaming data pipeline named **Veyro** (pronounced *VAY-ro*). The platform simulates a ride-booking transaction system (similar to Uber) to demonstrate real-time ingestion, stream processing, schema enforcement, and denormalized analytical modeling.
@@ -126,11 +124,3 @@ Cleans transactions and prepares denormalized serving tables.
     python api.py
     ```
     Access the portal at `http://localhost:8000`.
-
-### 2. Production Firebase Deploy
-The app is configured for serverless hosting:
-*   Make sure you are logged in to the Firebase CLI.
-*   Deploy using the command:
-    ```powershell
-    firebase deploy --force
-    ```

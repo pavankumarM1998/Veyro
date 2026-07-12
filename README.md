@@ -12,6 +12,49 @@ Explore the live, interactive Power BI analytical report for this streaming pipe
 
 ---
 
+## 📐 Professional End-to-End Lakehouse Architecture (Data Scientist & Engineer Perspective)
+As a Data Scientist/Databricks Engineer, we structure this end-to-end real-time project using the **Delta Lake Lakehouse Medallion Architecture**, separating concerns across ingestion, purification, machine learning preparation, and serving:
+
+```mermaid
+flowchart TD
+    subgraph Ingestion ["1. Real-Time Ingestion (Bronze)"]
+        Producer[FastAPI Event Simulator] -->|JSON Stream| EventHubs[Azure Event Hubs / Kafka]
+        EventHubs -->|Spark Structured Streaming| DeltaBronze[Delta Bronze Lake: Raw Ingest]
+    end
+
+    subgraph Refining ["2. Purification & Quality (Silver)"]
+        DeltaBronze -->|Schema Enforcement & Type Casting| Parsing[JSON Parse & Cast]
+        Parsing -->|Deduplication & Watermarking| DeltaSilver[Delta Silver Lake: Cleaned Transactions]
+    end
+
+    subgraph DataScience ["3. Data Science & Feature Store"]
+        DeltaSilver -->|Feature Engineering| MLStore[Databricks Feature Store]
+        MLStore -->|Predictive Modeling| SurgeModel[Demand/Surge Forecasting & Cancellation Model]
+    end
+
+    subgraph Serving ["4. Business Intelligence (Gold)"]
+        DeltaSilver -->|Denormalization / Star Schema Joins| GoldOBT[Delta Gold Lake: One Big Table / BI Views]
+        GoldOBT -->|Databricks SQL Warehouse| PowerBI[Power BI: DirectQuery Reporting]
+    end
+```
+
+### Phase-by-Phase Execution:
+1.  **Phase 1: Ingestion & Live Data Capture (Bronze)**
+    *   **Live Events**: User interactions in the FastAPI app trigger ride requests. The Python Event Hubs SDK streams events asynchronously with microsecond latency.
+    *   **Bronze Ingestion**: Databricks runs a Spark Structured Streaming job that reads directly from the Event Hub. Payloads are appended raw to Delta storage with check-pointing to guarantee *exactly-once* or *at-least-once* write semantics.
+2.  **Phase 2: Cleaning, Validation & Deduplication (Silver)**
+    *   **Schema Enforcement**: Raw JSON string values are parsed using explicit Spark schemas (`from_json`) and cast to exact data types (timestamps, decimals, integers).
+    *   **Data Quality**: Cleans invalid or null passenger ratings and enforces business constraints.
+    *   **Stream Deduplication**: Employs watermarking (`withWatermark`) on `booking_timestamp` to automatically ignore late-arriving duplicate events within a 15-minute window.
+3.  **Phase 3: Feature Store & Machine Learning (Data Science Layer)**
+    *   **Feature Engineering**: The clean Silver data is used to generate features such as historical passenger tip ratios, vehicle rating averages, rolling traffic speed metrics, and surge multiplier trends.
+    *   **Model Training**: Databricks MLflow tracks models trained on these features to predict ride cancellations and forecast peak demand surge.
+4.  **Phase 4: Serving & Interactive Business Intelligence (Gold)**
+    *   **Dimensional Modeling**: The Silver transactions fact table is joined with static dimensional tables (`dim_passenger`, `dim_driver`, `dim_city`, `dim_payment`) to form a high-performance **One Big Table (OBT)** or Star Schema.
+    *   **BI Connectivity**: The Gold Delta tables are exposed via a Databricks SQL Warehouse. Power BI connects via **DirectQuery** to serve live interactive dashboards with zero data movement or latency.
+
+---
+
 ## 🚀 Key Patterns & Features
 
 *   **Real-Time Event Generation:** A serverless FastAPI portal that simulates dynamic ride bookings, generating mock records using `Faker` (passenger details, fare calculations, surge multipliers, geographical coordinates).
@@ -21,52 +64,6 @@ Explore the live, interactive Power BI analytical report for this streaming pipe
     *   **Silver Layer:** Dynamic JSON schema parsing, type casting, data cleaning (handling null ratings, sanitizing timestamps), and watermark-based event deduplication.
     *   **Gold Layer (One Big Table - OBT):** Joins transaction facts with dimensional map configurations to build a single flat OBT model optimized for BI reports.
 *   **Serverless Production Deployment:** Deployed to Firebase Hosting integrated with Gen 2 Firebase Python Functions using an `a2wsgi` ASGI-to-WSGI compatibility adapter.
-
----
-
-## 📐 Architecture & Data Flow Diagram
-
-```mermaid
-flowchart TD
-    subgraph Client ["Client / Event Producer"]
-        UI[FastAPI webApp]
-        Gen[data.py Generator]
-        HubSDK[EventHub Connection SDK]
-    end
-
-    subgraph Ingestion ["Ingestion Broker"]
-        EH[Azure Event Hubs Namespace]
-    end
-
-    subgraph Databricks ["Azure Databricks Processing"]
-        direction TB
-        Bronze[bronze_adls.ipynb <br> Raw Stream Delta]
-        Silver[silver.py / silver_obt.ipynb <br> Cleaned & Parsed Delta]
-        Gold[silver_obt.sql <br> One Big Table Delta]
-    end
-
-    subgraph Storage ["Target Storage (ADLS Gen2)"]
-        RawB[Bronze Container]
-        CleanS[Silver Container]
-        ObtG[Gold OBT Container]
-    end
-
-    subgraph Serving ["BI Analytics"]
-        PBI[Power BI / Databricks SQL]
-    end
-
-    %% Data Connections
-    UI -->|1. Booking Submit| Gen
-    Gen -->|2. Event Payload| HubSDK
-    HubSDK -->|3. Streaming Push| EH
-    EH -->|4. Read Stream| Bronze
-    Bronze -->|5. Write Raw| RawB
-    Bronze -->|6. Clean & Deduplicate| Silver
-    Silver -->|7. Write Structured| CleanS
-    Silver -->|8. Denormalize Lookup Joins| Gold
-    Gold -->|9. Write OBT| ObtG
-    ObtG -->|10. DirectQuery| PBI
-```
 
 ---
 

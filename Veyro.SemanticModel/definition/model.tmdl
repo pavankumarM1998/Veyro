@@ -1,0 +1,28 @@
+model Model
+	culture: en-US
+	defaultPowerBIDataSourceVersion: powerBI_V3
+	sourceQueryCulture: en-IN
+	dataAccessOptions
+		legacyRedirects
+		returnErrorValuesAsNull
+
+annotation __PBI_TimeIntelligenceEnabled = 1
+
+annotation PBI_QueryOrder = ["dim_booking_mv","dim_city_mv","dim_driver_mv","dim_passenger_mv","dim_payment_mv","dim_vehicle_mv","fact_mv"]
+
+annotation PBI_ProTooling = ["DevMode"]
+
+ref table dim_booking_mv
+ref table dim_city_mv
+ref table dim_driver_mv
+ref table dim_passenger_mv
+ref table dim_payment_mv
+ref table dim_vehicle_mv
+ref table fact_mv
+ref table DateTableTemplate_41e8b0c3-8088-4a31-961f-cd2e07ac9bc3
+ref table LocalDateTable_4582c232-2e42-446a-a981-2b5c0508eebc
+ref table LocalDateTable_e45aae11-13c1-4b2e-b793-f1ab19d48abe
+ref table LocalDateTable_5dbaaed8-e8e2-4038-8aa8-713712cc92fb
+
+ref cultureInfo en-US
+

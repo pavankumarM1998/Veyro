@@ -1,0 +1,52 @@
+table dim_driver_mv
+	lineageTag: 41b177a3-1d4d-4cad-986a-b744d1f5f3dd
+
+	column driver_id
+		dataType: string
+		sourceProviderType: nvarchar(max)
+		lineageTag: b75059bb-e1ef-4031-8b54-23af23d7c6ba
+		summarizeBy: none
+		sourceColumn: driver_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column driver_name
+		dataType: string
+		sourceProviderType: nvarchar(max)
+		lineageTag: c2305e45-430d-459b-8999-e60bf3c858ff
+		summarizeBy: none
+		sourceColumn: driver_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column driver_phone
+		dataType: string
+		sourceProviderType: nvarchar(max)
+		lineageTag: 645bef3b-a1a4-4a9f-ab9d-aa9827c5cb2c
+		summarizeBy: none
+		sourceColumn: driver_phone
+
+		annotation SummarizationSetBy = Automatic
+
+	column driver_rating
+		dataType: double
+		sourceProviderType: double
+		lineageTag: bed4f281-ca67-4d54-abeb-14d18ec9ab61
+		summarizeBy: sum
+		sourceColumn: driver_rating
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	partition dim_driver_mv = m
+		mode: import
+		source =
+				let
+				    Source = DatabricksMultiCloud.Catalogs("dbc-d28a9352-b065.cloud.databricks.com", "/sql/1.0/warehouses/0f6b718a2d7e4f6f", [Catalog=null, Database=null, QueryTags=null, EnableAutomaticProxyDiscovery=null, Implementation="2.0", Protocol=null]),
+				    veyro_Database = Source{[Name="veyro",Kind="Database"]}[Data],
+				    bronze_Schema = veyro_Database{[Name="bronze",Kind="Schema"]}[Data],
+				    dim_driver_mv_View = bronze_Schema{[Name="dim_driver_mv",Kind="View"]}[Data]
+				in
+				    dim_driver_mv_View
+

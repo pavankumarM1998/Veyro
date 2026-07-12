@@ -1,0 +1,181 @@
+table dim_booking_mv
+	lineageTag: 994bc4a9-7852-4520-863e-12ce57d229f9
+
+	column ride_id
+		dataType: string
+		sourceProviderType: nvarchar(max)
+		lineageTag: f85c2f54-1549-4e87-ab1d-5b4568991e6f
+		summarizeBy: none
+		sourceColumn: ride_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column confirmation_number
+		dataType: string
+		sourceProviderType: nvarchar(max)
+		lineageTag: 4780ed22-f4dd-4169-b1e2-c4f8653df889
+		summarizeBy: none
+		sourceColumn: confirmation_number
+
+		annotation SummarizationSetBy = Automatic
+
+	column pickup_location_id
+		dataType: string
+		sourceProviderType: nvarchar(max)
+		lineageTag: e5b26dbe-2eeb-4cc8-a342-c881e4fb7cfa
+		summarizeBy: none
+		sourceColumn: pickup_location_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column dropoff_location_id
+		dataType: string
+		sourceProviderType: nvarchar(max)
+		lineageTag: e9c29d30-1277-422c-92d9-f713ec38b0bc
+		summarizeBy: none
+		sourceColumn: dropoff_location_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column pickup_city_id
+		dataType: int64
+		formatString: 0
+		sourceProviderType: bigint
+		lineageTag: cbabdf9e-c8fa-4d19-95f7-ce6ef0e2bcb7
+		summarizeBy: sum
+		sourceColumn: pickup_city_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column dropoff_city_id
+		dataType: int64
+		formatString: 0
+		sourceProviderType: bigint
+		lineageTag: e1237a9b-ea74-4b2c-851c-82e7739b5072
+		summarizeBy: sum
+		sourceColumn: dropoff_city_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column cancellation_reason_id
+		dataType: int64
+		formatString: 0
+		sourceProviderType: bigint
+		lineageTag: d4e53c1e-4b2d-4de7-917a-d282771f89f4
+		summarizeBy: sum
+		sourceColumn: cancellation_reason_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column pickup_address
+		dataType: string
+		sourceProviderType: nvarchar(max)
+		lineageTag: 90ede3a2-7f45-4c0f-b1d2-862dfad43b67
+		summarizeBy: none
+		sourceColumn: pickup_address
+
+		annotation SummarizationSetBy = Automatic
+
+	column dropoff_address
+		dataType: string
+		sourceProviderType: nvarchar(max)
+		lineageTag: bfb28771-c987-44a2-82ec-34d6260df2ae
+		summarizeBy: none
+		sourceColumn: dropoff_address
+
+		annotation SummarizationSetBy = Automatic
+
+	column pickup_latitude
+		dataType: double
+		sourceProviderType: double
+		lineageTag: c3d3f673-6260-44f1-9b1c-6afabab686b0
+		summarizeBy: sum
+		sourceColumn: pickup_latitude
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column pickup_longitude
+		dataType: double
+		sourceProviderType: double
+		lineageTag: c76953f8-5e4d-4edb-b605-d5df3c1c84da
+		summarizeBy: sum
+		sourceColumn: pickup_longitude
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column dropoff_latitude
+		dataType: double
+		sourceProviderType: double
+		lineageTag: c1ae2b68-e41d-47b7-b087-939ce1ebd5ec
+		summarizeBy: sum
+		sourceColumn: dropoff_latitude
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column dropoff_longitude
+		dataType: double
+		sourceProviderType: double
+		lineageTag: 0932aec5-412d-4a6b-b94d-a9c8dabbb957
+		summarizeBy: sum
+		sourceColumn: dropoff_longitude
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column booking_timestamp
+		dataType: dateTime
+		formatString: General Date
+		sourceProviderType: datetime2
+		lineageTag: 8b6b95ed-ae0e-48b5-98b0-159625e1c0e2
+		summarizeBy: none
+		sourceColumn: booking_timestamp
+
+		variation Variation
+			isDefault
+			relationship: 6ed4be47-c0ef-414e-922c-b17d1f9739c9
+			defaultHierarchy: LocalDateTable_4582c232-2e42-446a-a981-2b5c0508eebc.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+	column pickup_timestamp
+		dataType: string
+		sourceProviderType: nvarchar(max)
+		lineageTag: 90732e72-be89-4195-a4a9-397ba8041d7c
+		summarizeBy: none
+		sourceColumn: pickup_timestamp
+
+		annotation SummarizationSetBy = Automatic
+
+	column dropoff_timestamp
+		dataType: string
+		sourceProviderType: nvarchar(max)
+		lineageTag: e75efb89-5767-4b08-a6eb-d3fb0df6e9ed
+		summarizeBy: none
+		sourceColumn: dropoff_timestamp
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Cancellation Reason' = SWITCH(dim_booking_mv[cancellation_reason_id], 1, "Driver cancelled", 2, "Passenger cancelled", 3, "No show", "Completed")
+		lineageTag: 0aab7fba-07dd-4b7e-88f9-a1e567bc6546
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dim_booking_mv = m
+		mode: import
+		source =
+				let
+				    Source = DatabricksMultiCloud.Catalogs("dbc-d28a9352-b065.cloud.databricks.com", "/sql/1.0/warehouses/0f6b718a2d7e4f6f", [Catalog=null, Database=null, QueryTags=null, EnableAutomaticProxyDiscovery=null, Implementation="2.0", Protocol=null]),
+				    veyro_Database = Source{[Name="veyro",Kind="Database"]}[Data],
+				    bronze_Schema = veyro_Database{[Name="bronze",Kind="Schema"]}[Data],
+				    dim_booking_mv_View = bronze_Schema{[Name="dim_booking_mv",Kind="View"]}[Data]
+				in
+				    dim_booking_mv_View
+

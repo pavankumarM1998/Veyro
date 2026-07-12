@@ -1,0 +1,77 @@
+table dim_vehicle_mv
+	lineageTag: 747bfbb0-d963-4429-bd74-243063b28c4c
+
+	column vehicle_id
+		dataType: string
+		sourceProviderType: nvarchar(max)
+		lineageTag: 3c5bde91-c8a7-492f-83e1-7bea606da3ef
+		summarizeBy: none
+		sourceColumn: vehicle_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column vehicle_make
+		dataType: string
+		sourceProviderType: nvarchar(max)
+		lineageTag: 6b189d47-d6fd-4242-a85f-4a9e0fb8c668
+		summarizeBy: none
+		sourceColumn: vehicle_make
+
+		annotation SummarizationSetBy = Automatic
+
+	column vehicle_model
+		dataType: string
+		sourceProviderType: nvarchar(max)
+		lineageTag: 2db83e07-b706-4f57-ad0c-e4bffbbab1aa
+		summarizeBy: none
+		sourceColumn: vehicle_model
+
+		annotation SummarizationSetBy = Automatic
+
+	column vehicle_color
+		dataType: string
+		sourceProviderType: nvarchar(max)
+		lineageTag: 79329714-9ca8-49a7-9e87-4c251155267c
+		summarizeBy: none
+		sourceColumn: vehicle_color
+
+		annotation SummarizationSetBy = Automatic
+
+	column license_plate
+		dataType: string
+		sourceProviderType: nvarchar(max)
+		lineageTag: 1ed1839c-c4f2-4ba6-af55-ea1ee0fc3954
+		summarizeBy: none
+		sourceColumn: license_plate
+
+		annotation SummarizationSetBy = Automatic
+
+	column vehicle_type
+		dataType: string
+		sourceProviderType: nvarchar(max)
+		lineageTag: bb994380-736a-4c1d-b8a6-97115dd198c3
+		summarizeBy: none
+		sourceColumn: vehicle_type
+
+		annotation SummarizationSetBy = Automatic
+
+	column description
+		dataType: string
+		sourceProviderType: nvarchar(max)
+		lineageTag: 8a8c77b0-d869-4ecc-9465-e0754f868f8f
+		summarizeBy: none
+		sourceColumn: description
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dim_vehicle_mv = m
+		mode: import
+		source =
+				let
+				    Source = DatabricksMultiCloud.Catalogs("dbc-d28a9352-b065.cloud.databricks.com", "/sql/1.0/warehouses/0f6b718a2d7e4f6f", [Catalog=null, Database=null, QueryTags=null, EnableAutomaticProxyDiscovery=null, Implementation="2.0", Protocol=null]),
+				    veyro_Database = Source{[Name="veyro",Kind="Database"]}[Data],
+				    bronze_Schema = veyro_Database{[Name="bronze",Kind="Schema"]}[Data],
+				    dim_vehicle_mv_View = bronze_Schema{[Name="dim_vehicle_mv",Kind="View"]}[Data]
+				in
+				    dim_vehicle_mv_View
+

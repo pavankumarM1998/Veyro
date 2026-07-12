@@ -8,8 +8,8 @@ wheels/
 
 # Virtual environments
 .venv
-venv
 
-.env
-
-not_for_you/
+# Power BI Project (PBIP)
+**/cache.abf
+**/.pbi/localSettings.json
+**/editorSettings.json

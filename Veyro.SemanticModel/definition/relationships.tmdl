@@ -1,0 +1,39 @@
+relationship 'fact_mv[ride_id] -> dim_booking_mv[ride_id]'
+	fromColumn: fact_mv.ride_id
+	toColumn: dim_booking_mv.ride_id
+
+relationship 'fact_mv[pickup_city_id] -> dim_city_mv[city_id]'
+	fromColumn: fact_mv.pickup_city_id
+	toColumn: dim_city_mv.city_id
+
+relationship 'fact_mv[driver_id] -> dim_driver_mv[driver_id]'
+	fromColumn: fact_mv.driver_id
+	toColumn: dim_driver_mv.driver_id
+
+relationship 'fact_mv[passenger_id] -> dim_passenger_mv[passenger_id]'
+	fromColumn: fact_mv.passenger_id
+	toColumn: dim_passenger_mv.passenger_id
+
+relationship 'fact_mv[payment_method_id] -> dim_payment_mv[payment_method_id]'
+	fromColumn: fact_mv.payment_method_id
+	toColumn: dim_payment_mv.payment_method_id
+
+relationship 'fact_mv[vehicle_id] -> dim_vehicle_mv[vehicle_id]'
+	fromColumn: fact_mv.vehicle_id
+	toColumn: dim_vehicle_mv.vehicle_id
+
+relationship 6ed4be47-c0ef-414e-922c-b17d1f9739c9
+	joinOnDateBehavior: datePartOnly
+	fromColumn: dim_booking_mv.booking_timestamp
+	toColumn: LocalDateTable_4582c232-2e42-446a-a981-2b5c0508eebc.Date
+
+relationship d81da2dd-7a2e-41aa-8b98-b88ce24bd613
+	joinOnDateBehavior: datePartOnly
+	fromColumn: dim_city_mv.updated_at
+	toColumn: LocalDateTable_e45aae11-13c1-4b2e-b793-f1ab19d48abe.Date
+
+relationship cae5d029-4d18-4727-bb31-2c6e6abd507d
+	joinOnDateBehavior: datePartOnly
+	fromColumn: fact_mv.booking_timestamp
+	toColumn: LocalDateTable_5dbaaed8-e8e2-4038-8aa8-713712cc92fb.Date
+

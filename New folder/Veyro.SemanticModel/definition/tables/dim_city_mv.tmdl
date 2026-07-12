@@ -1,0 +1,66 @@
+table dim_city_mv
+	lineageTag: 110710af-2980-435c-bf80-af501b2050dd
+
+	column city_id
+		dataType: int64
+		formatString: 0
+		sourceProviderType: bigint
+		lineageTag: 7971e6a4-f356-4c4d-bd7c-60cd037e67ce
+		summarizeBy: none
+		sourceColumn: city_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column city
+		dataType: string
+		sourceProviderType: nvarchar(max)
+		lineageTag: 01d484a0-e963-405a-bdd0-37fed0239645
+		summarizeBy: none
+		sourceColumn: city
+
+		annotation SummarizationSetBy = Automatic
+
+	column state
+		dataType: string
+		sourceProviderType: nvarchar(max)
+		lineageTag: 5870f634-4383-4350-a366-a1c559f2e1c1
+		summarizeBy: none
+		sourceColumn: state
+
+		annotation SummarizationSetBy = Automatic
+
+	column region
+		dataType: string
+		sourceProviderType: nvarchar(max)
+		lineageTag: 98bd167b-0e77-4630-a4b8-fd6dc58456b5
+		summarizeBy: none
+		sourceColumn: region
+
+		annotation SummarizationSetBy = Automatic
+
+	column updated_at
+		dataType: dateTime
+		formatString: General Date
+		sourceProviderType: datetime2
+		lineageTag: 7f0a6084-e486-4230-a26d-da9eb5090990
+		summarizeBy: none
+		sourceColumn: updated_at
+
+		variation Variation
+			isDefault
+			relationship: d81da2dd-7a2e-41aa-8b98-b88ce24bd613
+			defaultHierarchy: LocalDateTable_e45aae11-13c1-4b2e-b793-f1ab19d48abe.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dim_city_mv = m
+		mode: import
+		source =
+				let
+				    Source = DatabricksMultiCloud.Catalogs("dbc-d28a9352-b065.cloud.databricks.com", "/sql/1.0/warehouses/0f6b718a2d7e4f6f", [Catalog=null, Database=null, QueryTags=null, EnableAutomaticProxyDiscovery=null, Implementation="2.0", Protocol=null]),
+				    veyro_Database = Source{[Name="veyro",Kind="Database"]}[Data],
+				    bronze_Schema = veyro_Database{[Name="bronze",Kind="Schema"]}[Data],
+				    dim_city_mv_View = bronze_Schema{[Name="dim_city_mv",Kind="View"]}[Data]
+				in
+				    dim_city_mv_View
+

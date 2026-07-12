@@ -1,0 +1,113 @@
+{
+  "version": "1.1.0",
+  "diagrams": [
+    {
+      "ordinal": 0,
+      "scrollPosition": {
+        "x": 315.20001220703125,
+        "y": 20
+      },
+      "nodes": [
+        {
+          "location": {
+            "x": 0,
+            "y": 0
+          },
+          "nodeIndex": "dim_booking_mv",
+          "nodeLineageTag": "994bc4a9-7852-4520-863e-12ce57d229f9",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 1
+        },
+        {
+          "location": {
+            "x": 284,
+            "y": 50
+          },
+          "nodeIndex": "dim_city_mv",
+          "nodeLineageTag": "110710af-2980-435c-bf80-af501b2050dd",
+          "size": {
+            "height": 200,
+            "width": 234
+          },
+          "zIndex": 2
+        },
+        {
+          "location": {
+            "x": 568,
+            "y": 50
+          },
+          "nodeIndex": "dim_driver_mv",
+          "nodeLineageTag": "41b177a3-1d4d-4cad-986a-b744d1f5f3dd",
+          "size": {
+            "height": 200,
+            "width": 234
+          },
+          "zIndex": 3
+        },
+        {
+          "location": {
+            "x": 852,
+            "y": 50
+          },
+          "nodeIndex": "dim_passenger_mv",
+          "nodeLineageTag": "e89ab9af-ba6b-4d6d-ae43-2f74181bf8a0",
+          "size": {
+            "height": 200,
+            "width": 234
+          },
+          "zIndex": 4
+        },
+        {
+          "location": {
+            "x": 1136,
+            "y": 86
+          },
+          "nodeIndex": "dim_payment_mv",
+          "nodeLineageTag": "3c96175c-a95f-4fe7-8639-2e9912e0c1e2",
+          "size": {
+            "height": 128,
+            "width": 234
+          },
+          "zIndex": 7
+        },
+        {
+          "location": {
+            "x": 1420,
+            "y": 14
+          },
+          "nodeIndex": "dim_vehicle_mv",
+          "nodeLineageTag": "747bfbb0-d963-4429-bd74-243063b28c4c",
+          "size": {
+            "height": 272,
+            "width": 234
+          },
+          "zIndex": 5
+        },
+        {
+          "location": {
+            "x": 791,
+            "y": 326
+          },
+          "nodeIndex": "fact_mv",
+          "nodeLineageTag": "5451c81f-5970-4f15-8d85-6cb7d48dee75",
+          "size": {
+            "height": 281,
+            "width": 355
+          },
+          "zIndex": 6
+        }
+      ],
+      "name": "All tables",
+      "zoomValue": 100,
+      "pinKeyFieldsToTop": false,
+      "showExtraHeaderInfo": false,
+      "hideKeyFieldsWhenCollapsed": false,
+      "tablesLocked": false
+    }
+  ],
+  "selectedDiagram": "All tables",
+  "defaultDiagram": "All tables"
+}

@@ -1,0 +1,320 @@
+table fact_mv
+	lineageTag: 5451c81f-5970-4f15-8d85-6cb7d48dee75
+
+	measure 'Total Revenue' = SUM(fact_mv[total_fare])
+		formatString: $#,0.00
+		displayFolder: KPIs
+		lineageTag: 0630b524-0a84-427e-8cab-2534783f83d4
+
+	measure 'Total Rides' = COUNTROWS(fact_mv)
+		formatString: #,0
+		displayFolder: KPIs
+		lineageTag: 436187ea-80ba-4a5a-aecc-eb8e0cfb2787
+
+	measure 'Avg Fare' = AVERAGE(fact_mv[total_fare])
+		formatString: $#,0.00
+		displayFolder: KPIs
+		lineageTag: 366da55e-c400-4c48-9f16-6e2ee6bf6e93
+
+	measure 'Avg Tip' = AVERAGE(fact_mv[tip_amount])
+		formatString: $#,0.00
+		displayFolder: KPIs
+		lineageTag: 78674157-b5ba-475b-9691-d313d3f41b6c
+
+	measure 'Avg Rating' = AVERAGE(fact_mv[rating])
+		formatString: 0.00
+		displayFolder: KPIs
+		lineageTag: a1811a18-3a2c-4c11-a022-f86856108d86
+
+	measure 'Total Distance' = SUM(fact_mv[distance_miles])
+		formatString: #,0.0
+		displayFolder: KPIs
+		lineageTag: 700f1f44-df00-4c10-869c-ec8462e41f3f
+
+	measure 'Avg Distance' = AVERAGE(fact_mv[distance_miles])
+		formatString: #,0.0
+		displayFolder: KPIs
+		lineageTag: 2e9dca70-4397-442b-af0f-3f4a7dd4afd9
+
+	measure 'Total Tip' = SUM(fact_mv[tip_amount])
+		formatString: $#,0.00
+		displayFolder: KPIs
+		lineageTag: 7bc63b0a-f619-4e0f-9d74-1048c2074223
+
+	measure 'Surge Multiplier Avg' = AVERAGE(fact_mv[surge_multiplier])
+		formatString: 0.00
+		displayFolder: KPIs
+		lineageTag: 3314b3e9-53f7-43eb-bdcf-6279cf248493
+
+	measure 'Total Duration Min' = SUM(fact_mv[duration_minutes])
+		formatString: #,0
+		displayFolder: KPIs
+		lineageTag: 31194595-e411-4df0-b220-86de5b856bca
+
+	measure 'Avg Duration Min' = AVERAGE(fact_mv[duration_minutes])
+		formatString: 0.0
+		displayFolder: KPIs
+		lineageTag: ac55284e-5de3-4030-92f8-c823bfec6d59
+
+	column ride_id
+		dataType: string
+		sourceProviderType: nvarchar(max)
+		lineageTag: 12232f57-d8a6-43b2-8dd0-c6e2c49e047c
+		summarizeBy: none
+		sourceColumn: ride_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column pickup_city_id
+		dataType: int64
+		formatString: 0
+		sourceProviderType: bigint
+		lineageTag: 826a67ec-d57a-4d4e-9efe-7f0a9851645b
+		summarizeBy: none
+		sourceColumn: pickup_city_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column payment_method_id
+		dataType: int64
+		formatString: 0
+		sourceProviderType: bigint
+		lineageTag: 97ace0d4-ba1f-44b1-944d-4dc4b149805f
+		summarizeBy: none
+		sourceColumn: payment_method_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column driver_id
+		dataType: string
+		sourceProviderType: nvarchar(max)
+		lineageTag: d3a0fbec-f398-4174-9c06-8c76f1060bc7
+		summarizeBy: none
+		sourceColumn: driver_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column passenger_id
+		dataType: string
+		sourceProviderType: nvarchar(max)
+		lineageTag: e592305a-adb0-46fe-a1d7-a2cb6c2519a0
+		summarizeBy: none
+		sourceColumn: passenger_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column vehicle_id
+		dataType: string
+		sourceProviderType: nvarchar(max)
+		lineageTag: 0eaae542-db63-45d2-a927-61b9c049b903
+		summarizeBy: none
+		sourceColumn: vehicle_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column distance_miles
+		dataType: double
+		sourceProviderType: double
+		lineageTag: 2af155cf-42f8-4087-8d76-62a1df38602f
+		summarizeBy: sum
+		sourceColumn: distance_miles
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column duration_minutes
+		dataType: int64
+		formatString: 0
+		sourceProviderType: bigint
+		lineageTag: dd3bfaeb-dd6a-4a1e-9a2d-57a6b698ce45
+		summarizeBy: sum
+		sourceColumn: duration_minutes
+
+		annotation SummarizationSetBy = Automatic
+
+	column base_fare
+		dataType: double
+		sourceProviderType: double
+		lineageTag: 6de6c423-e372-43f7-9ec5-bc40c5458644
+		summarizeBy: sum
+		sourceColumn: base_fare
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column distance_fare
+		dataType: double
+		sourceProviderType: double
+		lineageTag: 7f7baa46-2fe0-4b64-823c-6542ceeed306
+		summarizeBy: sum
+		sourceColumn: distance_fare
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column time_fare
+		dataType: double
+		sourceProviderType: double
+		lineageTag: c629feb3-3fd5-40b9-baf6-10163a41718c
+		summarizeBy: sum
+		sourceColumn: time_fare
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column surge_multiplier
+		dataType: double
+		sourceProviderType: double
+		lineageTag: f8c817c2-3f1c-40b7-9ec4-d22ad2e931eb
+		summarizeBy: sum
+		sourceColumn: surge_multiplier
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column subtotal
+		dataType: double
+		sourceProviderType: double
+		lineageTag: 40dd36a7-969f-4606-9f16-b02e5f42bc5c
+		summarizeBy: sum
+		sourceColumn: subtotal
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column tip_amount
+		dataType: double
+		sourceProviderType: double
+		lineageTag: f7ae32c7-00c4-44e5-8123-eebd805fbf87
+		summarizeBy: sum
+		sourceColumn: tip_amount
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column total_fare
+		dataType: double
+		sourceProviderType: double
+		lineageTag: 30f88de6-5307-4815-b1f5-df2f2c4ac663
+		summarizeBy: sum
+		sourceColumn: total_fare
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column rating
+		dataType: double
+		sourceProviderType: double
+		lineageTag: 443e7be2-6d80-4a5f-bc38-ad62ee3f79f7
+		summarizeBy: sum
+		sourceColumn: rating
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column ride_status_id
+		dataType: int64
+		formatString: 0
+		sourceProviderType: bigint
+		lineageTag: c8aa461f-0215-485f-8be8-7620f63d5c80
+		summarizeBy: sum
+		sourceColumn: ride_status_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column vehicle_type_id
+		dataType: int64
+		formatString: 0
+		sourceProviderType: bigint
+		lineageTag: aa41c5cc-8a32-4909-b04a-ef20c519153e
+		summarizeBy: sum
+		sourceColumn: vehicle_type_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column vehicle_make_id
+		dataType: int64
+		formatString: 0
+		sourceProviderType: bigint
+		lineageTag: 6a6c5a64-9cdd-486a-939e-94d8cd29aa96
+		summarizeBy: sum
+		sourceColumn: vehicle_make_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column per_mile
+		dataType: double
+		sourceProviderType: double
+		lineageTag: ff9a3d68-65e2-45e2-8c4b-972c5ddeed2c
+		summarizeBy: sum
+		sourceColumn: per_mile
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column per_minute
+		dataType: double
+		sourceProviderType: double
+		lineageTag: d3af8a9a-d7d4-4c22-8915-247d4e8f3b63
+		summarizeBy: sum
+		sourceColumn: per_minute
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column booking_timestamp
+		dataType: dateTime
+		formatString: General Date
+		sourceProviderType: datetime2
+		lineageTag: 6bf8fba4-7ded-46fa-9ea0-e94914eade2d
+		summarizeBy: none
+		sourceColumn: booking_timestamp
+
+		variation Variation
+			isDefault
+			relationship: cae5d029-4d18-4727-bb31-2c6e6abd507d
+			defaultHierarchy: LocalDateTable_5dbaaed8-e8e2-4038-8aa8-713712cc92fb.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Ride Status' = SWITCH(fact_mv[ride_status_id], 1, "Completed", 2, "Cancelled", "Unknown")
+		lineageTag: 11248a46-70af-45a6-a0ce-48eac1ed301c
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Month Name' = FORMAT(fact_mv[booking_timestamp], "MMMM")
+		lineageTag: 0dd2c69b-aa9c-42b7-a943-c3f62c4b1afd
+		summarizeBy: none
+		sortByColumn: 'Month Number'
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Month Number' = MONTH(fact_mv[booking_timestamp])
+		lineageTag: bd10ad2d-8572-407b-afe1-d9ac26831860
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+	partition fact_mv = m
+		mode: import
+		source =
+				let
+				    Source = DatabricksMultiCloud.Catalogs("dbc-d28a9352-b065.cloud.databricks.com", "/sql/1.0/warehouses/0f6b718a2d7e4f6f", [Catalog=null, Database=null, QueryTags=null, EnableAutomaticProxyDiscovery=null, Implementation="2.0", Protocol=null]),
+				    veyro_Database = Source{[Name="veyro",Kind="Database"]}[Data],
+				    bronze_Schema = veyro_Database{[Name="bronze",Kind="Schema"]}[Data],
+				    fact_mv_View = bronze_Schema{[Name="fact_mv",Kind="View"]}[Data]
+				in
+				    fact_mv_View
+

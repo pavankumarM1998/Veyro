@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Report",
+    "displayName": "Veyro"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "31f041f8-07b2-4569-89ae-d68e32b7ba6b"
+  }
+}

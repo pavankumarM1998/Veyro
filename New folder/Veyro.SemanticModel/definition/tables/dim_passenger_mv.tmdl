@@ -1,0 +1,50 @@
+table dim_passenger_mv
+	lineageTag: e89ab9af-ba6b-4d6d-ae43-2f74181bf8a0
+
+	column passenger_id
+		dataType: string
+		sourceProviderType: nvarchar(max)
+		lineageTag: 70ab5c12-40e9-4056-903b-52a012090464
+		summarizeBy: none
+		sourceColumn: passenger_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column passenger_name
+		dataType: string
+		sourceProviderType: nvarchar(max)
+		lineageTag: ea00398f-d22c-42c6-baf9-ff80ab4d5648
+		summarizeBy: none
+		sourceColumn: passenger_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column passenger_email
+		dataType: string
+		sourceProviderType: nvarchar(max)
+		lineageTag: 199ba655-7e6f-4d61-9feb-22d915f69ccf
+		summarizeBy: none
+		sourceColumn: passenger_email
+
+		annotation SummarizationSetBy = Automatic
+
+	column passenger_phone
+		dataType: string
+		sourceProviderType: nvarchar(max)
+		lineageTag: 2dc00e49-f912-4f47-a0d5-45bc8aaab5a0
+		summarizeBy: none
+		sourceColumn: passenger_phone
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dim_passenger_mv = m
+		mode: import
+		source =
+				let
+				    Source = DatabricksMultiCloud.Catalogs("dbc-d28a9352-b065.cloud.databricks.com", "/sql/1.0/warehouses/0f6b718a2d7e4f6f", [Catalog=null, Database=null, QueryTags=null, EnableAutomaticProxyDiscovery=null, Implementation="2.0", Protocol=null]),
+				    veyro_Database = Source{[Name="veyro",Kind="Database"]}[Data],
+				    bronze_Schema = veyro_Database{[Name="bronze",Kind="Schema"]}[Data],
+				    dim_passenger_mv_View = bronze_Schema{[Name="dim_passenger_mv",Kind="View"]}[Data]
+				in
+				    dim_passenger_mv_View
+
